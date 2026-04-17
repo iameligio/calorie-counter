@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-500: #10b981;
+  --color-primary-600: #059669;
+  --color-dark-900: #111827;
+  --color-dark-800: #1f2937;
+  --color-dark-700: #374151;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+  50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s infinite;
+}

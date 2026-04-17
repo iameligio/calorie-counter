@@ -1,0 +1,382 @@
+{
+    "message": "SQLSTATE[HY000]: General error: 1 table users has no column named calorie_target (Connection: sqlite, Database: /Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/database/database.sqlite, SQL: insert into \"users\" (\"name\", \"email\", \"password\", \"calorie_target\", \"updated_at\", \"created_at\") values (test4, test4@example.com, $2y$12$W5bwKvdJDiMkwmxLEZRAHO6Ic.dYxya1UV.D2YHVFX52mPEoWoIq6, 2000, 2026-04-16 20:41:37, 2026-04-16 20:41:37))",
+    "exception": "Illuminate\\Database\\QueryException",
+    "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+    "line": 838,
+    "trace": [
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+            "line": 794,
+            "function": "runQueryCallback",
+            "class": "Illuminate\\Database\\Connection",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+            "line": 573,
+            "function": "run",
+            "class": "Illuminate\\Database\\Connection",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+            "line": 537,
+            "function": "statement",
+            "class": "Illuminate\\Database\\Connection",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/Processor.php",
+            "line": 32,
+            "function": "insert",
+            "class": "Illuminate\\Database\\Connection",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php",
+            "line": 4170,
+            "function": "processInsertGetId",
+            "class": "Illuminate\\Database\\Query\\Processors\\Processor",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php",
+            "line": 2237,
+            "function": "insertGetId",
+            "class": "Illuminate\\Database\\Query\\Builder",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
+            "line": 1436,
+            "function": "__call",
+            "class": "Illuminate\\Database\\Eloquent\\Builder",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
+            "line": 1401,
+            "function": "insertAndSetId",
+            "class": "Illuminate\\Database\\Eloquent\\Model",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
+            "line": 1240,
+            "function": "performInsert",
+            "class": "Illuminate\\Database\\Eloquent\\Model",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php",
+            "line": 1219,
+            "function": "save",
+            "class": "Illuminate\\Database\\Eloquent\\Model",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php",
+            "line": 393,
+            "function": "Illuminate\\Database\\Eloquent\\{closure}",
+            "class": "Illuminate\\Database\\Eloquent\\Builder",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php",
+            "line": 1218,
+            "function": "tap"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php",
+            "line": 23,
+            "function": "create",
+            "class": "Illuminate\\Database\\Eloquent\\Builder",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
+            "line": 2540,
+            "function": "forwardCallTo",
+            "class": "Illuminate\\Database\\Eloquent\\Model",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
+            "line": 2556,
+            "function": "__call",
+            "class": "Illuminate\\Database\\Eloquent\\Model",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/app/Http/Controllers/AuthController.php",
+            "line": 20,
+            "function": "__callStatic",
+            "class": "Illuminate\\Database\\Eloquent\\Model",
+            "type": "::"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php",
+            "line": 46,
+            "function": "register",
+            "class": "App\\Http\\Controllers\\AuthController",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php",
+            "line": 265,
+            "function": "dispatch",
+            "class": "Illuminate\\Routing\\ControllerDispatcher",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php",
+            "line": 211,
+            "function": "runController",
+            "class": "Illuminate\\Routing\\Route",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+            "line": 822,
+            "function": "run",
+            "class": "Illuminate\\Routing\\Route",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 180,
+            "function": "Illuminate\\Routing\\{closure}",
+            "class": "Illuminate\\Routing\\Router",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php",
+            "line": 50,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Routing\\Middleware\\SubstituteBindings",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 137,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+            "line": 821,
+            "function": "then",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+            "line": 800,
+            "function": "runRouteWithinStack",
+            "class": "Illuminate\\Routing\\Router",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+            "line": 764,
+            "function": "runRoute",
+            "class": "Illuminate\\Routing\\Router",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+            "line": 753,
+            "function": "dispatchToRoute",
+            "class": "Illuminate\\Routing\\Router",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+            "line": 200,
+            "function": "dispatch",
+            "class": "Illuminate\\Routing\\Router",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 180,
+            "function": "Illuminate\\Foundation\\Http\\{closure}",
+            "class": "Illuminate\\Foundation\\Http\\Kernel",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+            "line": 21,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php",
+            "line": 31,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+            "line": 21,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php",
+            "line": 51,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Middleware\\TrimStrings",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php",
+            "line": 27,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Http\\Middleware\\ValidatePostSize",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php",
+            "line": 109,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php",
+            "line": 74,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Http\\Middleware\\HandleCors",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php",
+            "line": 58,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Http\\Middleware\\TrustProxies",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php",
+            "line": 22,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php",
+            "line": 26,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 219,
+            "function": "handle",
+            "class": "Illuminate\\Http\\Middleware\\ValidatePathEncoding",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+            "line": 137,
+            "function": "Illuminate\\Pipeline\\{closure}",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+            "line": 175,
+            "function": "then",
+            "class": "Illuminate\\Pipeline\\Pipeline",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+            "line": 144,
+            "function": "sendRequestThroughRouter",
+            "class": "Illuminate\\Foundation\\Http\\Kernel",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php",
+            "line": 1220,
+            "function": "handle",
+            "class": "Illuminate\\Foundation\\Http\\Kernel",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/public/index.php",
+            "line": 20,
+            "function": "handleRequest",
+            "class": "Illuminate\\Foundation\\Application",
+            "type": "->"
+        },
+        {
+            "file": "/Users/eligio/Documents/Projects/WWW/myfitnesspal/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php",
+            "line": 23,
+            "function": "require_once"
+        }
+    ]
+}
