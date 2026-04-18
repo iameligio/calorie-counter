@@ -16,9 +16,7 @@ class FoodResource extends Resource
     protected static ?string $model = Food::class;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-beaker';
-
-    protected static string | \UnitEnum | null $navigationGroup = 'Food Management';
-
+    // protected static string | \UnitEnum | null $navigationGroup = 'Food Management';
     protected static ?int $navigationSort = 1;
 
 
@@ -27,8 +25,8 @@ class FoodResource extends Resource
     {
         return $schema
             ->components([
-                Forms\Components\Section::make('Food Information')
-                    ->schema([
+                \Filament\Schemas\Components\Section::make('Food Information')
+                    ->components([
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -39,8 +37,8 @@ class FoodResource extends Resource
                             ->suffix('kcal / 100g'),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Macronutrients (per 100g)')
-                    ->schema([
+                \Filament\Schemas\Components\Section::make('Macronutrients (per 100g)')
+                    ->components([
                         Forms\Components\TextInput::make('protein')
                             ->numeric()
                             ->minValue(0)
@@ -58,8 +56,8 @@ class FoodResource extends Resource
                             ->default(0),
                     ])->columns(3),
 
-                Forms\Components\Section::make('Status')
-                    ->schema([
+                \Filament\Schemas\Components\Section::make('Status')
+                    ->components([
                         Forms\Components\Select::make('source')
                             ->options([
                                 'manual' => 'System (Manual)',

@@ -16,9 +16,7 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
-
-    protected static string | \UnitEnum | null $navigationGroup = 'User Management';
-
+    // protected static string | \UnitEnum | null $navigationGroup = 'User Management';
     protected static ?int $navigationSort = 2;
 
 
@@ -27,8 +25,8 @@ class UserResource extends Resource
     {
         return $schema
             ->components([
-                Forms\Components\Section::make('User Information')
-                    ->schema([
+                \Filament\Schemas\Components\Section::make('User Information')
+                    ->components([
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -43,20 +41,24 @@ class UserResource extends Resource
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->minLength(8)
                             ->maxLength(255),
-                    ])->columns(2),
+                    ])->columns(['sm' => 1, 'md' => 2]),
 
-                Forms\Components\Section::make('Settings')
-                    ->schema([
+                \Filament\Schemas\Components\Section::make('Settings')
+                    ->components([
                         Forms\Components\TextInput::make('calorie_target')
                             ->numeric()
                             ->default(2000)
                             ->minValue(500)
                             ->maxValue(10000)
-                            ->suffix('kcal'),
+                            ->suffix('kcal')
+                            ->columnSpanFull(),
                         Forms\Components\Toggle::make('is_admin')
                             ->label('Administrator')
                             ->helperText('Allow access to the admin panel.'),
-                    ])->columns(2),
+                        Forms\Components\Toggle::make('is_banned')
+                            ->label('Suspended / Banned')
+                            ->helperText('Prevent user from logging in.'),
+                    ])->columns(['sm' => 1, 'md' => 2]),
             ]);
     }
 
@@ -80,6 +82,10 @@ class UserResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_admin')
                     ->label('Admin')
+                    ->boolean()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('is_banned')
+                    ->label('Banned')
                     ->boolean()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('logs_count')

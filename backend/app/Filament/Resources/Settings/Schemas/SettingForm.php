@@ -10,13 +10,15 @@ class SettingForm
     {
         return $schema
             ->components([
-                \Filament\Schemas\Components\TextInput::make('key')
+                \Filament\Forms\Components\TextInput::make('key')
                     ->required()
                     ->maxLength(255)
                     ->disabled(),
-                \Filament\Schemas\Components\TextInput::make('value')
-                    ->required()
-                    ->numeric(),
+                \Filament\Forms\Components\TextInput::make('value')
+                    ->required(),
+                \Filament\Forms\Components\Textarea::make('description')
+                    ->maxLength(1000)
+                    ->columnSpanFull(),
             ]);
     }
 }

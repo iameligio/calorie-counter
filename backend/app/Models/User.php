@@ -28,6 +28,7 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'calorie_target',
         'is_admin',
+        'is_banned',
         'gender',
         'age',
         'height_cm',
@@ -58,6 +59,7 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_banned' => 'boolean',
         ];
     }
 

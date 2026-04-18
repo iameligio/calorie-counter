@@ -48,6 +48,14 @@ class AuthController extends Controller
             ]);
         }
 
+        if ($user->is_banned) {
+            // Using rate_limit_admin_email to signify it's cached settings.
+            $adminEmail = \Illuminate\Support\Facades\Cache::remember('admin_email', 3600, fn () => \App\Models\Setting::where('key', 'admin_email')->value('value') ?? 'support@example.com');
+            throw ValidationException::withMessages([
+                'email' => ["Your account has been suspended. Please contact {$adminEmail} to appeal."],
+            ]);
+        }
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

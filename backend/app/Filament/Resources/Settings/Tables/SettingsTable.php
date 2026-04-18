@@ -15,9 +15,15 @@ class SettingsTable
             ->columns([
                 \Filament\Tables\Columns\TextColumn::make('key')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('bold'),
                 \Filament\Tables\Columns\TextColumn::make('value')
-                    ->searchable(),
+                    ->searchable()
+                    ->limit(30),
+                \Filament\Tables\Columns\TextColumn::make('description')
+                    ->searchable()
+                    ->color('gray')
+                    ->limit(50),
                 \Filament\Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
