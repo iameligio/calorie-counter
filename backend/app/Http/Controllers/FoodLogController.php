@@ -57,6 +57,10 @@ class FoodLogController extends Controller
         
         $food = Food::findOrFail($validated['food_id']);
         
+        if ($food->source === 'user' && $food->created_by !== $request->user()->id) {
+            abort(403, 'Unauthorized action. This custom food does not belong to you.');
+        }
+        
         $calories = (int) round(($validated['grams'] / 100) * $food->calories_per_100g);
         
         $log = $request->user()->logs()->create([

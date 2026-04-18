@@ -21,8 +21,12 @@ class FoodController extends Controller
         return response()->json(['data' => $foods]);
     }
     
-    public function show(Food $food)
+    public function show(Request $request, Food $food)
     {
+        if ($food->source === 'user' && $food->created_by !== $request->user()->id) {
+            abort(403, 'Unauthorized action. This food does not belong to you.');
+        }
+        
         return response()->json($food);
     }
     
@@ -39,6 +43,10 @@ class FoodController extends Controller
         $validated['source'] = 'user';
         $validated['is_verified'] = false;
         $validated['created_by'] = $request->user()->id;
+        
+        $validated['protein'] = $validated['protein'] ?? 0;
+        $validated['carbs'] = $validated['carbs'] ?? 0;
+        $validated['fat'] = $validated['fat'] ?? 0;
         
         $food = Food::create($validated);
         

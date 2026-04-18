@@ -5,7 +5,7 @@ import useAuthStore from '../store/authStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
-import { Search, Plus, Trash2, Flame, X, UtensilsCrossed, Award } from 'lucide-react';
+import { Search, Plus, Trash2, Flame, X, UtensilsCrossed, Award, Scale, Target } from 'lucide-react';
 import axiosClient from '../services/axiosClient';
 import ProgressChart from '../components/ProgressChart';
 
@@ -236,8 +236,10 @@ export default function Dashboard() {
       
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
         
-        {/* Summary Card */}
-        <Card className="bg-white/80 border-0 shadow-lg shadow-emerald-500/5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="col-span-1 md:col-span-2">
+            {/* Summary Card */}
+            <Card className="bg-white/80 border-0 shadow-lg shadow-emerald-500/5 h-full">
           <CardHeader>
             <CardTitle className="text-gray-800 flex items-center">
               <Flame className="mr-2 h-5 w-5 text-orange-500" />
@@ -278,6 +280,52 @@ export default function Dashboard() {
             )}
           </CardContent>
         </Card>
+          </div>
+
+          <div className="col-span-1">
+            {/* Weight Hub Card */}
+            <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-0 shadow-lg shadow-emerald-500/5 h-full relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <Target className="w-32 h-32" />
+              </div>
+              <CardHeader>
+                <CardTitle className="text-emerald-900 flex items-center">
+                  <Scale className="mr-2 h-5 w-5 text-emerald-600" />
+                  Weight Hub
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="relative z-10">
+                {user ? (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <p className="text-sm text-emerald-600/70 font-medium mb-1">Current Weight</p>
+                        <p className="text-3xl font-black text-emerald-900">{user.weight_kg || '-'} <span className="text-lg font-bold text-emerald-700/50">kg</span></p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-end pt-4 border-t border-emerald-200/50">
+                      <div>
+                        <p className="text-sm text-emerald-600/70 font-medium mb-1">Target Weight</p>
+                        <p className="text-2xl font-black text-emerald-800">{user.target_weight_kg || '-'} <span className="text-base font-bold text-emerald-700/50">kg</span></p>
+                      </div>
+                    </div>
+
+                    {user.weight_kg && user.target_weight_kg && (
+                      <div className="mt-4 p-3 bg-emerald-100 rounded-xl">
+                        <p className="text-sm font-bold text-emerald-800 text-center">
+                          {Math.abs((parseFloat(user.weight_kg) - parseFloat(user.target_weight_kg)).toFixed(1))} kg to go!
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="animate-pulse h-20 bg-emerald-100/50 rounded-xl"></div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         {/* Progress Chart Section */}
         <section className="animate-in slide-in-from-bottom duration-700">
