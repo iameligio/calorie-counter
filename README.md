@@ -1,4 +1,4 @@
-# 👋 Welcome to the MyFitnessPal Clone!
+# 👋 Welcome to the Calorie Counter!
 
 Hello! If you're reading this, you're probably looking to get this calorie tracking app up and running on your own web host. 
 
