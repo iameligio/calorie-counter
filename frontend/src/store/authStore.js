@@ -20,9 +20,9 @@ const useAuthStore = create((set) => ({
   login: async (email, password) => {
     set({ isLoading: true });
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://myfitnesspal.test/api';
+      const baseUrl = import.meta.env.VITE_APP_BASE_URL || 'http://back.myfitnesspal.test';
       // CSRF cookie request
-      await axiosClient.get(`${baseUrl.replace('/api', '')}/sanctum/csrf-cookie`, {
+      await axiosClient.get(`${baseUrl}/sanctum/csrf-cookie`, {
          baseURL: '' // Prevent appending to /api for the cookie route
       });
       
