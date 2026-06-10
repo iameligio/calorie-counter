@@ -31,7 +31,10 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $limit = Cache::remember('rate_limit_login', 3600, fn () => Setting::where('key', 'rate_limit_login')->value('value') ?? 10);
-            return Limit::perMinute((int) $limit)->by($request->ip());
+            // Key by email + IP so attackers can't lock out other accounts,
+            // and a single NAT'd IP can't exhaust everyone's allowance.
+            $key = strtolower((string) $request->input('email')) . '|' . $request->ip();
+            return Limit::perMinute((int) $limit)->by($key);
         });
 
         RateLimiter::for('foods', function (Request $request) {

@@ -27,8 +27,6 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'calorie_target',
-        'is_admin',
-        'is_banned',
         'gender',
         'age',
         'height_cm',
@@ -37,6 +35,9 @@ class User extends Authenticatable implements FilamentUser
         'activity_level',
         'goal',
     ];
+
+    // is_admin and is_banned are intentionally NOT in $fillable.
+    // Use forceFill() in trusted admin-only contexts (Filament pages).
 
     /**
      * The attributes that should be hidden for serialization.
@@ -69,6 +70,17 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->is_admin === true;
+    }
+
+    protected static function booted(): void
+    {
+        // Revoke all tokens the moment a user is suspended, so an active
+        // session can't outlive the ban.
+        static::updated(function (User $user): void {
+            if ($user->wasChanged('is_banned') && $user->is_banned) {
+                $user->tokens()->delete();
+            }
+        });
     }
 
     public function logs(): HasMany {

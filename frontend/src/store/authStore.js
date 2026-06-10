@@ -20,12 +20,7 @@ const useAuthStore = create((set) => ({
   login: async (email, password) => {
     set({ isLoading: true });
     try {
-      const baseUrl = import.meta.env.VITE_APP_BASE_URL || 'http://back.myfitnesspal.test';
-      // CSRF cookie request
-      await axiosClient.get(`${baseUrl}/sanctum/csrf-cookie`, {
-         baseURL: '' // Prevent appending to /api for the cookie route
-      });
-      
+      // Auth is Bearer-token based, so no CSRF cookie round-trip is needed.
       const { data } = await axiosClient.post('/login', { email, password });
       set({ user: data.user, token: data.access_token, isLoading: false });
       localStorage.setItem('auth_token', data.access_token);

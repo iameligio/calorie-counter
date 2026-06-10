@@ -1,0 +1,10 @@
+# Root-level ignores
+
+# Playwright MCP session artifacts (screenshots, snapshots, console logs)
+.playwright-mcp/
+
+# OS
+.DS_Store
+
+# Local Docker env (use .env.example)
+.env

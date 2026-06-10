@@ -1,0 +1,83 @@
+name: myfitnesspal
+
+# ── Local development ──────────────────────────────────────────────────────────
+# Usage:  make dev
+#         make dev-down
+#
+# The backend and frontend code is mounted as a live volume — edit files on
+# your host and changes take effect immediately (no rebuild needed).
+# Backend API:  http://localhost:8000
+# Frontend:     http://localhost:5173
+
+services:
+
+  api:
+    build:
+      context: ./backend
+      target: base           # dev stage — no COPY, just extensions + composer
+    volumes:
+      - ./backend:/var/www/html
+      - vendor_cache:/var/www/html/vendor   # persist vendor between restarts
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks: [app]
+
+  web:
+    image: nginx:1.25-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./docker/nginx/local.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend:/var/www/html:ro
+    depends_on: [api]
+    networks: [app]
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - node_modules_cache:/app/node_modules
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    networks: [app]
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-secret}
+      MYSQL_DATABASE: ${DB_DATABASE:-myfitnesspal}
+      MYSQL_USER: ${DB_USERNAME:-app}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [app]
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    networks: [app]
+
+volumes:
+  db_data:
+  redis_data:
+  vendor_cache:
+  node_modules_cache:
+
+networks:
+  app:
