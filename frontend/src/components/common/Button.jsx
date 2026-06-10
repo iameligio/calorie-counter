@@ -1,13 +1,7 @@
-import React from 'react';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { Loader2 } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
-export function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
-
-export function Button({ 
+export function Button({
   className, 
   variant = 'primary', 
   size = 'default', 

@@ -1,22 +1,20 @@
 import { create } from 'zustand';
-import axiosClient from '../services/axiosClient';
+import { statsService } from '../services/statsService';
 
 const useDashboardStore = create((set) => ({
   dashboard: null,
   isLoading: false,
+  error: null,
 
   fetchDashboard: async (dateStr) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      const { data } = await axiosClient.get('/dashboard', {
-        params: dateStr ? { date: dateStr } : {}
-      });
-      set({ dashboard: data, isLoading: false });
+      const dashboard = await statsService.dashboard(dateStr);
+      set({ dashboard, isLoading: false });
     } catch (error) {
-      set({ isLoading: false });
-      console.error("Error fetching dashboard", error);
+      set({ isLoading: false, error });
     }
-  }
+  },
 }));
 
 export default useDashboardStore;

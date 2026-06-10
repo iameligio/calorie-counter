@@ -1,18 +1,26 @@
 import { create } from 'zustand';
 import axiosClient from '../services/axiosClient';
 
-const useAuthStore = create((set) => ({
+const TOKEN_KEY = 'auth_token';
+
+/**
+ * Authentication state. The Bearer token is the single source of truth and is
+ * mirrored to localStorage exclusively through `setToken` so persistence never
+ * drifts from in-memory state.
+ */
+const useAuthStore = create((set, get) => ({
   user: null,
-  token: localStorage.getItem('auth_token'),
+  token: localStorage.getItem(TOKEN_KEY),
   isLoading: false,
   isInitialized: false,
 
   setUser: (user) => set({ user }),
+
   setToken: (token) => {
     if (token) {
-      localStorage.setItem('auth_token', token);
+      localStorage.setItem(TOKEN_KEY, token);
     } else {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem(TOKEN_KEY);
     }
     set({ token });
   },
@@ -20,14 +28,12 @@ const useAuthStore = create((set) => ({
   login: async (email, password) => {
     set({ isLoading: true });
     try {
-      // Auth is Bearer-token based, so no CSRF cookie round-trip is needed.
       const { data } = await axiosClient.post('/login', { email, password });
-      set({ user: data.user, token: data.access_token, isLoading: false });
-      localStorage.setItem('auth_token', data.access_token);
+      get().setToken(data.access_token);
+      set({ user: data.user });
       return data;
-    } catch (error) {
+    } finally {
       set({ isLoading: false });
-      throw error;
     }
   },
 
@@ -35,12 +41,11 @@ const useAuthStore = create((set) => ({
     set({ isLoading: true });
     try {
       const { data } = await axiosClient.post('/register', { name, email, password });
-      set({ user: data.user, token: data.access_token, isLoading: false });
-      localStorage.setItem('auth_token', data.access_token);
+      get().setToken(data.access_token);
+      set({ user: data.user });
       return data;
-    } catch (error) {
+    } finally {
       set({ isLoading: false });
-      throw error;
     }
   },
 
@@ -49,8 +54,8 @@ const useAuthStore = create((set) => ({
     try {
       await axiosClient.post('/logout');
     } finally {
-      set({ user: null, token: null, isLoading: false });
-      localStorage.removeItem('auth_token');
+      get().setToken(null);
+      set({ user: null, isLoading: false });
     }
   },
 
@@ -58,13 +63,13 @@ const useAuthStore = create((set) => ({
     try {
       const { data } = await axiosClient.get('/user');
       set({ user: data });
-    } catch (error) {
-      set({ user: null, token: null });
-      localStorage.removeItem('auth_token');
+    } catch {
+      get().setToken(null);
+      set({ user: null });
     } finally {
       set({ isInitialized: true });
     }
-  }
+  },
 }));
 
 export default useAuthStore;

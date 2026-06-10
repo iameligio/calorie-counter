@@ -16,7 +16,7 @@ function App() {
     } else if (!token) {
       useAuthStore.setState({ isInitialized: true });
     }
-  }, [token, isInitialized]);
+  }, [token, isInitialized, fetchUser]);
 
   if (!isInitialized && token) {
     return (

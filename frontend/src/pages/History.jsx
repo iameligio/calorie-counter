@@ -1,59 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
-import useDashboardStore from '../store/dashboardStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/common/Card';
-import { Button } from '../components/common/Button';
-import { Trash2, Flame, ChevronLeft, ChevronRight, Calendar, History as HistoryIcon } from 'lucide-react';
-import axiosClient from '../services/axiosClient';
+import ProgressBar from '../components/common/ProgressBar';
+import { ChevronLeft, ChevronRight, Trash2, History as HistoryIcon } from 'lucide-react';
+import { logService } from '../services/logService';
 
-function ProgressBar({ current, target }) {
-  const percentage = Math.min(100, Math.round((current / target) * 100)) || 0;
-  const isOver = current > target;
-  
-  return (
-    <div className="w-full">
-      <div className="flex justify-between text-sm font-medium mb-2">
-        <span className="text-gray-600">Daily Progress</span>
-        <span className={isOver ? "text-red-500 font-bold" : "text-emerald-600"}>
-          {current} / {target} kcal
-        </span>
-      </div>
-      <div className="h-4 w-full bg-gray-200 rounded-full overflow-hidden shadow-inner font-bold">
-        <div 
-          className={`h-full rounded-full transition-all duration-1000 ease-out ${isOver ? 'bg-red-500' : 'bg-gradient-to-r from-emerald-400 to-teal-500'}`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
-}
+const todayStr = () => new Date().toISOString().split('T')[0];
+const EMPTY_SUMMARY = { total_calories: 0, total_target: 2000, days_count: 1 };
 
 export default function History() {
-  const { dashboard, fetchDashboard, isLoading } = useDashboardStore();
   const [logs, setLogs] = useState([]);
-  const [summary, setSummary] = useState({ total_calories: 0, total_target: 2000, days_count: 1 });
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
-  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [summary, setSummary] = useState(EMPTY_SUMMARY);
+  const [isLoading, setIsLoading] = useState(false);
+  const [startDate, setStartDate] = useState(todayStr);
+  const [endDate, setEndDate] = useState(todayStr);
 
-  const refreshData = async () => {
+  const refreshData = useCallback(async () => {
+    setIsLoading(true);
     try {
-      const { data } = await axiosClient.get('/logs', { 
-        params: { 
-          start_date: startDate,
-          end_date: endDate
-        } 
-      });
-      setLogs(data.logs || []);
-      setSummary(data.summary || { total_calories: 0, total_target: 2000, days_count: 1 });
-    } catch (e) {
-      console.error(e);
+      const { logs, summary } = await logService.list({ start_date: startDate, end_date: endDate });
+      setLogs(logs);
+      setSummary(summary);
+    } catch (error) {
+      console.error('Failed to load history:', error);
       setLogs([]);
+      setSummary(EMPTY_SUMMARY);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [startDate, endDate]);
 
   useEffect(() => {
     refreshData();
-  }, [startDate, endDate]);
+  }, [refreshData]);
 
   const setRangePreset = (type) => {
       const today = new Date();
@@ -87,10 +66,10 @@ export default function History() {
 
   const deleteLog = async (id) => {
     try {
-      await axiosClient.delete(`/logs/${id}`);
+      await logService.remove(id);
       refreshData();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error('Failed to delete log:', error);
     }
   };
 
@@ -197,7 +176,7 @@ export default function History() {
                     </p>
                   </div>
                 </div>
-                <ProgressBar current={summary.total_calories} target={summary.total_target} />
+                <ProgressBar current={summary.total_calories} target={summary.total_target} label="Daily Progress" />
               </div>
           </CardContent>
         </Card>

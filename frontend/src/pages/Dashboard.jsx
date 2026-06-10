@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import useDashboardStore from '../store/dashboardStore';
 import useAuthStore from '../store/authStore';
@@ -6,30 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/common/C
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import { Search, Plus, Trash2, Flame, X, UtensilsCrossed, Award, Scale, Target } from 'lucide-react';
-import axiosClient from '../services/axiosClient';
 import ProgressChart from '../components/ProgressChart';
-
-function ProgressBar({ current, target }) {
-  const percentage = Math.min(100, Math.round((current / target) * 100)) || 0;
-  const isOver = current > target;
-  
-  return (
-    <div className="w-full">
-      <div className="flex justify-between text-sm font-medium mb-2">
-        <span className="text-gray-600">Progress</span>
-        <span className={isOver ? "text-red-500 font-bold" : "text-emerald-600"}>
-          {current} / {target} kcal
-        </span>
-      </div>
-      <div className="h-4 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner">
-        <div 
-          className={`h-full rounded-full transition-all duration-1000 ease-out ${isOver ? 'bg-red-500' : 'bg-gradient-to-r from-emerald-400 to-teal-500'}`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
-}
+import ProgressBar from '../components/common/ProgressBar';
+import { foodService } from '../services/foodService';
+import { logService } from '../services/logService';
+import { statsService } from '../services/statsService';
 
 function AddCustomFoodModal({ isOpen, onClose, onFoodCreated }) {
   const [name, setName] = useState('');
@@ -45,14 +26,14 @@ function AddCustomFoodModal({ isOpen, onClose, onFoodCreated }) {
     setError('');
     setIsSubmitting(true);
     try {
-      const { data } = await axiosClient.post('/foods', {
+      const food = await foodService.create({
         name,
-        calories_per_100g: parseInt(caloriesPer100g),
+        calories_per_100g: parseInt(caloriesPer100g, 10),
         protein: protein ? parseFloat(protein) : null,
         carbs: carbs ? parseFloat(carbs) : null,
         fat: fat ? parseFloat(fat) : null,
       });
-      onFoodCreated(data);
+      onFoodCreated(food);
       // Reset fields
       setName(''); setCaloriesPer100g(''); setProtein(''); setCarbs(''); setFat('');
     } catch (err) {
@@ -136,7 +117,7 @@ function AddCustomFoodModal({ isOpen, onClose, onFoodCreated }) {
 }
 
 export default function Dashboard() {
-  const { dashboard, fetchDashboard, isLoading } = useDashboardStore();
+  const { dashboard, fetchDashboard } = useDashboardStore();
   const { user } = useAuthStore();
   
   const [logs, setLogs] = useState([]);
@@ -152,36 +133,41 @@ export default function Dashboard() {
   const [period, setPeriod] = useState('week');
   const [streak, setStreak] = useState(0);
 
-  const fetchProgress = async (p = period) => {
+  const fetchProgress = useCallback(async (selectedPeriod) => {
     try {
-      const { data } = await axiosClient.get(`/progress?period=${p}`);
-      setHistoryData(data.history);
-      setStreak(data.streak);
-    } catch (err) {
-      console.error('Failed to fetch progress:', err);
+      const { history, streak } = await statsService.progress(selectedPeriod);
+      setHistoryData(history);
+      setStreak(streak);
+    } catch (error) {
+      console.error('Failed to fetch progress:', error);
     }
-  };
+  }, []);
 
-  const refreshData = async () => {
-    fetchDashboard();
-    fetchProgress();
+  const fetchLogs = useCallback(async () => {
     try {
-      const { data } = await axiosClient.get('/logs');
-      // The API now returns {logs:[], summary:{}} instead of just []
-      setLogs(Array.isArray(data) ? data : (data.logs || []));
-    } catch (e) {
-      console.error(e);
+      const { logs } = await logService.list();
+      setLogs(logs);
+    } catch (error) {
+      console.error('Failed to load logs:', error);
       setLogs([]);
     }
-  };
+  }, []);
 
+  // Used by log/delete/create handlers to re-sync every panel at once.
+  const refreshData = useCallback(async () => {
+    await Promise.all([fetchDashboard(), fetchLogs(), fetchProgress(period)]);
+  }, [fetchDashboard, fetchLogs, fetchProgress, period]);
+
+  // Progress chart reacts to the selected period.
   useEffect(() => {
     fetchProgress(period);
-  }, [period]);
+  }, [fetchProgress, period]);
 
+  // Dashboard summary and today's logs load once on mount.
   useEffect(() => {
-    refreshData();
-  }, []);
+    fetchDashboard();
+    fetchLogs();
+  }, [fetchDashboard, fetchLogs]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -189,37 +175,32 @@ export default function Dashboard() {
     setIsSearching(true);
     setHasSearched(true);
     try {
-      const { data } = await axiosClient.get(`/foods?search=${encodeURIComponent(search)}`);
-      setSearchResults(data.data);
-      const g = {};
-      data.data.forEach(f => g[f.id] = 100);
-      setGrams(prev => ({ ...prev, ...g }));
-    } catch (err) {
-      console.error(err);
+      const results = await foodService.search(search);
+      setSearchResults(results);
+      const defaults = Object.fromEntries(results.map((f) => [f.id, 100]));
+      setGrams((prev) => ({ ...prev, ...defaults }));
+    } catch (error) {
+      console.error('Food search failed:', error);
     } finally {
       setIsSearching(false);
     }
   };
 
   const logFood = async (foodId) => {
-    const amount = grams[foodId] || 100;
     try {
-      await axiosClient.post('/logs', {
-        food_id: foodId,
-        grams: amount
-      });
+      await logService.create({ foodId, grams: grams[foodId] || 100 });
       refreshData();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error('Failed to log food:', error);
     }
   };
 
   const deleteLog = async (id) => {
     try {
-      await axiosClient.delete(`/logs/${id}`);
+      await logService.remove(id);
       refreshData();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error('Failed to delete log:', error);
     }
   };
 

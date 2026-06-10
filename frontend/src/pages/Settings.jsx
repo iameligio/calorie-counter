@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/common/C
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import { User, Activity, Scale, Ruler, Target, Save, CheckCircle } from 'lucide-react';
-import axiosClient from '../services/axiosClient';
+import { profileService } from '../services/profileService';
 
 const ACTIVITY_LEVELS = [
   { id: 'sedentary', label: 'Sedentary', desc: 'Little or no exercise' },
@@ -87,12 +87,12 @@ export default function Settings() {
     setIsSubmitting(true);
     setSuccess(false);
     try {
-      await axiosClient.put('/profile', formData);
+      await profileService.update(formData);
       await fetchUser();
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
     } finally {
       setIsSubmitting(false);
     }

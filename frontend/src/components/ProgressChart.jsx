@@ -10,6 +10,23 @@ import {
   ReferenceLine 
 } from 'recharts';
 
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+
+  const { value, payload: point } = payload[0];
+  return (
+    <div className="bg-gray-900/90 backdrop-blur-xl border border-white/20 p-4 rounded-xl shadow-2xl">
+      <p className="text-xs text-gray-400 mb-1">{label}</p>
+      <p className="text-lg font-bold text-white">
+        {value} <span className="text-xs font-normal text-gray-400">kcal</span>
+      </p>
+      <p className={`text-xs mt-1 ${value > point.target ? 'text-red-400' : 'text-emerald-400'}`}>
+        Target: {point.target}
+      </p>
+    </div>
+  );
+}
+
 const ProgressChart = ({ data, period, setPeriod }) => {
   if (!data || data.length === 0) {
     return (
@@ -18,23 +35,6 @@ const ProgressChart = ({ data, period, setPeriod }) => {
       </div>
     );
   }
-
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-gray-900/90 backdrop-blur-xl border border-white/20 p-4 rounded-xl shadow-2xl">
-          <p className="text-xs text-gray-400 mb-1">{label}</p>
-          <p className="text-lg font-bold text-white">
-            {payload[0].value} <span className="text-xs font-normal text-gray-400">kcal</span>
-          </p>
-          <p className={`text-xs mt-1 ${payload[0].value > payload[0].payload.target ? 'text-red-400' : 'text-emerald-400'}`}>
-            Target: {payload[0].payload.target}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">

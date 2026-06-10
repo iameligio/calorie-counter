@@ -20,13 +20,13 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor to handle 401s
+// On any 401, drop the stale token. Routing back to /login is handled by the
+// router guards in App.jsx, which react to the cleared auth state.
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response?.status === 401) {
       localStorage.removeItem('auth_token');
-      // window.location.href = '/login'; // Or handle via React Router
     }
     return Promise.reject(error);
   }
