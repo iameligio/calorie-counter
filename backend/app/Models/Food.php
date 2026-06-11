@@ -21,7 +21,10 @@ class Food extends Model
     ];
     
     protected $casts = [
-        'is_verified' => 'boolean'
+        'is_verified' => 'boolean',
+        'protein' => 'float',
+        'carbs' => 'float',
+        'fat' => 'float',
     ];
 
     public function creator(): BelongsTo

@@ -1,10 +1,5 @@
-import React, { forwardRef } from 'react';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
+import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
 
 export const Input = forwardRef(({ className, label, error, ...props }, ref) => {
   return (
