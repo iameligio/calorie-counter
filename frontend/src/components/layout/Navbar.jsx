@@ -2,11 +2,21 @@ import { Link, NavLink } from 'react-router-dom';
 import useAuthStore from '../../store/authStore';
 import { LogOut, Activity, Settings as SettingsIcon } from 'lucide-react';
 
+const LINKS = [
+  { to: '/dashboard', label: 'Dashboard' },
+  { to: '/history', label: 'History' },
+  { to: '/settings', label: 'Settings' },
+];
+
 export default function Navbar() {
   const { user, logout } = useAuthStore();
 
   const activeClass = "inline-flex items-center px-1 pt-1 border-b-2 border-emerald-500 text-sm font-medium text-gray-900";
   const inactiveClass = "inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700";
+
+  // py-3 keeps the tap target at ~44px, the comfortable minimum on touch.
+  const mobileActive = "flex-1 text-center px-3 py-3 rounded-lg text-sm font-semibold bg-emerald-50 text-emerald-700";
+  const mobileInactive = "flex-1 text-center px-3 py-3 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700";
 
   return (
     <nav className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-50">
@@ -18,24 +28,15 @@ export default function Navbar() {
               <span className="font-bold text-xl text-gray-900 tracking-tight">MyFitnessPal</span>
             </Link>
             <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
-              <NavLink 
-                to="/dashboard" 
-                className={({ isActive }) => isActive ? activeClass : inactiveClass}
-              >
-                Dashboard
-              </NavLink>
-              <NavLink 
-                to="/history" 
-                className={({ isActive }) => isActive ? activeClass : inactiveClass}
-              >
-                History
-              </NavLink>
-              <NavLink 
-                to="/settings" 
-                className={({ isActive }) => isActive ? activeClass : inactiveClass}
-              >
-                Settings
-              </NavLink>
+              {LINKS.map(({ to, label }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) => isActive ? activeClass : inactiveClass}
+                >
+                  {label}
+                </NavLink>
+              ))}
             </div>
           </div>
           <div className="flex items-center">
@@ -61,6 +62,22 @@ export default function Navbar() {
             )}
           </div>
         </div>
+
+        {/* The links above are hidden below `sm`. Without this row History and
+            Settings are unreachable on a phone. */}
+        {user && (
+          <div className="flex gap-1 pb-2 sm:hidden">
+            {LINKS.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) => isActive ? mobileActive : mobileInactive}
+              >
+                {label}
+              </NavLink>
+            ))}
+          </div>
+        )}
       </div>
     </nav>
   );

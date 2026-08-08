@@ -88,7 +88,7 @@ export default function History() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
         
         {/* Date Navigator Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-100 gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between bg-white px-4 sm:px-6 py-4 rounded-2xl shadow-sm border border-gray-100 gap-4">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600">
                <HistoryIcon className="h-6 w-6" />
@@ -99,8 +99,8 @@ export default function History() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100 mr-2">
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto min-w-0">
+            <div className="flex items-center justify-center bg-gray-50 rounded-lg p-1 border border-gray-100 sm:mr-2 w-full sm:w-auto">
                 <button 
                   onClick={() => setRangePreset('today')}
                   className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${isToday ? 'bg-white shadow-sm text-emerald-600' : 'text-gray-500 hover:text-gray-700'}`}
@@ -115,20 +115,20 @@ export default function History() {
                 >This Month</button>
             </div>
 
-            <div className="flex items-center bg-gray-50 rounded-xl p-1.5 border border-gray-100 shadow-inner">
+            <div className="flex items-center bg-gray-50 rounded-xl p-1.5 border border-gray-100 shadow-inner w-full sm:w-auto min-w-0">
               <button 
                 onClick={() => changeRange(-1)}
-                className="p-2 hover:bg-white hover:shadow-sm rounded-lg transition-all text-gray-600 cursor-pointer"
+                className="shrink-0 p-2 hover:bg-white hover:shadow-sm rounded-lg transition-all text-gray-600 cursor-pointer"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              <div className="px-4 flex items-center gap-2">
+              <div className="px-2 sm:px-4 flex items-center gap-1 sm:gap-2 flex-1 min-w-0">
                 <input 
                   type="date"
                   max={endDate}
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="bg-transparent text-sm font-bold text-gray-800 outline-none w-32 cursor-pointer"
+                  className="bg-transparent text-xs sm:text-sm font-bold text-gray-800 outline-none flex-1 min-w-0 sm:flex-none sm:w-32 cursor-pointer"
                 />
                 <span className="text-gray-400 font-bold">→</span>
                 <input 
@@ -137,13 +137,13 @@ export default function History() {
                   max={new Date().toISOString().split('T')[0]}
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="bg-transparent text-sm font-bold text-gray-800 outline-none w-32 cursor-pointer"
+                  className="bg-transparent text-xs sm:text-sm font-bold text-gray-800 outline-none flex-1 min-w-0 sm:flex-none sm:w-32 cursor-pointer"
                 />
               </div>
               <button 
                 onClick={() => changeRange(1)}
                 disabled={endDate >= new Date().toISOString().split('T')[0]}
-                className={`p-2 rounded-lg transition-all ${endDate >= new Date().toISOString().split('T')[0] ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white hover:shadow-sm text-gray-600 cursor-pointer'}`}
+                className={`shrink-0 p-2 rounded-lg transition-all ${endDate >= new Date().toISOString().split('T')[0] ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white hover:shadow-sm text-gray-600 cursor-pointer'}`}
               >
                 <ChevronRight className="h-5 w-5" />
               </button>

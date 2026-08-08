@@ -13,10 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Laravel 11+ dropped throttling from the default api group. Without
-        // this, only routes carrying an explicit named limiter are capped.
-        $middleware->throttleApi('api');
-
+        // Note: no group-level throttleApi() here. Stacking a group limiter on
+        // top of each route's own limiter doubles the rate-limit cache writes,
+        // and on the database cache driver two concurrent requests racing to
+        // insert the same key deadlock InnoDB. Every API route instead carries
+        // exactly one named limiter; ApiRouteCoverageTest enforces that.
         $middleware->alias([
             'not.banned' => EnsureUserIsNotBanned::class,
         ]);

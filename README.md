@@ -10,6 +10,45 @@ It's built as **two apps working together**:
   foods, and logs; does the calorie math. Includes an admin panel.
 - **Frontend (React + Vite)** — the dashboard, charts, and forms you interact with.
 
+---
+
+## 📸 A look inside
+
+### Your day at a glance
+
+Log what you eat, watch the ring close, and keep your streak alive. Calories are
+computed on the server from grams — the client never gets to decide them.
+
+![Member dashboard showing daily calorie summary, weight goal, a 7-day calorie chart, food search and the day's log entries](docs/screenshots/member-dashboard.png)
+
+### A target that fits you, not an average
+
+Enter your details and the app derives your daily calorie target with the
+Mifflin-St Jeor formula, adjusted for activity level and whether you want to
+lose, maintain, or gain.
+
+![Profile settings with gender, age, weight, target weight, height, activity level and fitness goal, producing a recommended daily calorie target](docs/screenshots/member-profile.png)
+
+### 8,017 foods, ready to search
+
+The food library is seeded from the USDA FoodData Central database, so real
+nutrition data is there from the first run — no manual data entry to get started.
+
+![Admin food library listing USDA foods with calories, protein, carbs, fat, source and verification status](docs/screenshots/admin-food.png)
+
+### Full admin control
+
+A Filament admin panel to manage members, promote admins, suspend accounts, and
+tune the API rate limits — no code changes required.
+
+![Admin users table showing members with calorie targets, admin and banned flags, and today's log counts](docs/screenshots/admin-users.png)
+
+### Built for the phone in your pocket
+
+<img src="docs/screenshots/mobile-dashboard.png" alt="The dashboard on a phone, with the calorie summary, weight goal and tabbed navigation" width="320">
+
+---
+
 There are two ways to run it:
 
 | | Best for | Effort |

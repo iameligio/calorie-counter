@@ -8,17 +8,21 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgressController;
 use Illuminate\Support\Facades\Route;
 
-// Every route below also inherits the `throttle:api` baseline from the api
-// middleware group (see bootstrap/app.php). The named limiters here are the
-// tighter, per-endpoint ceilings on top of it.
+// Every route carries exactly one `throttle:*` limiter — never two. Stacking a
+// group-wide limiter on top of these doubles the rate-limit cache writes and
+// deadlocks the database cache driver under concurrency. `throttle:api` is the
+// catch-all for endpoints without a tighter, purpose-built ceiling.
+// ApiRouteCoverageTest fails if a route is ever added without one.
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
 Route::middleware(['auth:sanctum', 'not.banned'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('throttle:api');
+    Route::get('/user', [AuthController::class, 'user'])->middleware('throttle:api');
 
+    // Reads are individually cheap, but the food search runs an unindexable
+    // LIKE across the whole table, so they share a tighter bucket.
     Route::middleware('throttle:reads')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
         Route::get('/progress', [ProgressController::class, 'index']);
@@ -29,7 +33,7 @@ Route::middleware(['auth:sanctum', 'not.banned'])->group(function () {
 
     Route::post('/foods', [FoodController::class, 'store'])->middleware('throttle:foods');
     Route::post('/logs', [FoodLogController::class, 'store'])->middleware('throttle:logs');
-    Route::delete('/logs/{id}', [FoodLogController::class, 'destroy']);
+    Route::delete('/logs/{id}', [FoodLogController::class, 'destroy'])->middleware('throttle:api');
 
-    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::put('/profile', [ProfileController::class, 'update'])->middleware('throttle:api');
 });
