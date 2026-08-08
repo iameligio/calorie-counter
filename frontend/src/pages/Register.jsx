@@ -20,7 +20,14 @@ export default function Register() {
       await register(name, email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      // A 422 carries per-field detail; the password policy usually trips more
+      // than one rule at a time, so show all of them rather than just the first.
+      const fieldErrors = Object.values(err.response?.data?.errors ?? {}).flat();
+      setError(
+        fieldErrors.length
+          ? fieldErrors.join(' ')
+          : err.response?.data?.message || 'Registration failed. Please try again.'
+      );
     }
   };
 
@@ -50,14 +57,19 @@ export default function Register() {
               onChange={e => setEmail(e.target.value)} 
               placeholder="you@example.com"
             />
-            <Input 
-              label="Password (min 8 characters)" 
-              type="password" 
-              required 
-              minLength={8}
-              value={password} 
-              onChange={e => setPassword(e.target.value)} 
-            />
+            <div>
+              <Input
+                label="Password"
+                type="password"
+                required
+                minLength={12}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <p className="mt-1.5 text-xs text-gray-500">
+                At least 12 characters, with upper and lower case, a number, and a symbol.
+              </p>
+            </div>
             <Button type="submit" className="w-full mt-2" isLoading={isLoading}>
               Sign Up
             </Button>

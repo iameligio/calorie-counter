@@ -14,15 +14,20 @@ export default function History() {
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState(todayStr);
   const [endDate, setEndDate] = useState(todayStr);
+  const [error, setError] = useState('');
 
   const refreshData = useCallback(async () => {
     setIsLoading(true);
+    setError('');
     try {
       const { logs, summary } = await logService.list({ start_date: startDate, end_date: endDate });
       setLogs(logs);
       setSummary(summary);
-    } catch (error) {
-      console.error('Failed to load history:', error);
+    } catch (err) {
+      // The API caps how wide a range one request may span, so an over-long
+      // selection has to read as a message rather than an empty result.
+      const fieldErrors = Object.values(err.response?.data?.errors ?? {}).flat();
+      setError(fieldErrors[0] || 'Failed to load history. Please try again.');
       setLogs([]);
       setSummary(EMPTY_SUMMARY);
     } finally {
@@ -145,6 +150,10 @@ export default function History() {
             </div>
           </div>
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-xl">{error}</div>
+        )}
 
         {/* History Summary Card */}
         <Card className="bg-white/90 border-0 shadow-xl shadow-gray-200/50">

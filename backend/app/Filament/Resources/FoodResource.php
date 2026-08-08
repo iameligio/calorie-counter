@@ -4,9 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FoodResource\Pages;
 use App\Models\Food;
-use Filament\Forms;
 use Filament\Actions;
+use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,17 +16,16 @@ class FoodResource extends Resource
 {
     protected static ?string $model = Food::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-beaker';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-beaker';
+
     // protected static string | \UnitEnum | null $navigationGroup = 'Food Management';
     protected static ?int $navigationSort = 1;
-
-
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                \Filament\Schemas\Components\Section::make('Food Information')
+                Section::make('Food Information')
                     ->components([
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -37,7 +37,7 @@ class FoodResource extends Resource
                             ->suffix('kcal / 100g'),
                     ])->columns(2),
 
-                \Filament\Schemas\Components\Section::make('Macronutrients (per 100g)')
+                Section::make('Macronutrients (per 100g)')
                     ->components([
                         Forms\Components\TextInput::make('protein')
                             ->numeric()
@@ -56,7 +56,7 @@ class FoodResource extends Resource
                             ->default(0),
                     ])->columns(3),
 
-                \Filament\Schemas\Components\Section::make('Status')
+                Section::make('Status')
                     ->components([
                         Forms\Components\Select::make('source')
                             ->options([
@@ -140,7 +140,7 @@ class FoodResource extends Resource
                     ->icon('heroicon-o-check-badge')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->visible(fn (Food $record): bool => !$record->is_verified)
+                    ->visible(fn (Food $record): bool => ! $record->is_verified)
                     ->action(fn (Food $record) => $record->update(['is_verified' => true])),
                 Actions\Action::make('unverify')
                     ->label('Unverify')

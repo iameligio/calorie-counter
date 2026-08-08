@@ -27,7 +27,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            // Throttled subclass — see App\Filament\Auth\Login.
+            ->login(\App\Filament\Auth\Login::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
