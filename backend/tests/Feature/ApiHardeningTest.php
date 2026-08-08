@@ -126,6 +126,35 @@ class ApiHardeningTest extends TestCase
             ->assertJsonValidationErrors('end_date');
     }
 
+    public function test_single_day_range_targets_exactly_one_day(): void
+    {
+        // Carbon 3 returns a float from diffInDays, and end_date is expanded to
+        // 23:59:59, so a same-day range must not round up to two days.
+        $user = User::factory()->create();
+        $user->forceFill(['calorie_target' => 1649])->save();
+
+        Sanctum::actingAs($user);
+
+        $this->getJson('/api/logs?start_date=2026-08-08&end_date=2026-08-08')
+            ->assertStatus(200)
+            ->assertJsonPath('summary.days_count', 1)
+            ->assertJsonPath('summary.total_target', 1649);
+    }
+
+    public function test_multi_day_range_targets_each_day_in_the_range(): void
+    {
+        $user = User::factory()->create();
+        $user->forceFill(['calorie_target' => 1649])->save();
+
+        Sanctum::actingAs($user);
+
+        // Aug 1 through Aug 7 inclusive is 7 days.
+        $this->getJson('/api/logs?start_date=2026-08-01&end_date=2026-08-07')
+            ->assertStatus(200)
+            ->assertJsonPath('summary.days_count', 7)
+            ->assertJsonPath('summary.total_target', 1649 * 7);
+    }
+
     public function test_logs_endpoint_accepts_a_reasonable_range(): void
     {
         Sanctum::actingAs(User::factory()->create());

@@ -42,7 +42,11 @@ class FoodLogController extends Controller
             $start = Carbon::parse($validated['start_date'])->startOfDay();
             $end = Carbon::parse($validated['end_date'])->endOfDay();
             $query->whereBetween('consumed_at', [$start, $end]);
-            $daysCount = $start->diffInDays($end) + 1;
+
+            // Carbon 3 returns a float here, and $end sits at 23:59:59, so
+            // diffing against it yields 0.9999… for a same-day range. Compare
+            // midnight to midnight and count inclusively.
+            $daysCount = (int) round($start->diffInDays($end->copy()->startOfDay())) + 1;
         } else {
             $query->whereDate('consumed_at', $validated['date'] ?? today()->toDateString());
             $daysCount = 1;
