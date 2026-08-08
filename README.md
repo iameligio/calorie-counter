@@ -106,6 +106,13 @@ Now **edit the two generated files** with your real values:
 
    SANCTUM_STATEFUL_DOMAINS=yourdomain.com
    FRONTEND_URL=https://yourdomain.com
+
+   # Required — browser origins allowed to call the API (comma separated).
+   # Anything not listed is refused, so never leave dev hosts in here.
+   CORS_ALLOWED_ORIGINS=https://yourdomain.com
+
+   # API token lifetime in minutes (default 14 days).
+   SANCTUM_TOKEN_EXPIRATION=20160
    ```
 
 Generate an app key and paste it into `backend/.env`:
@@ -164,6 +171,8 @@ on `app.yourwebsite.com`.
    APP_URL=https://api.yourwebsite.com
    FRONTEND_URL=https://app.yourwebsite.com
    SANCTUM_STATEFUL_DOMAINS=app.yourwebsite.com
+   CORS_ALLOWED_ORIGINS=https://app.yourwebsite.com   # required
+   SANCTUM_TOKEN_EXPIRATION=20160                     # token lifetime, minutes
    ```
 4. From the backend folder via SSH:
    ```bash

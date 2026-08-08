@@ -19,7 +19,7 @@ class AuthSecurityTest extends TestCase
         $response = $this->postJson('/api/register', [
             'name' => 'Jane',
             'email' => 'jane@example.com',
-            'password' => 'password123',
+            'password' => 'Str0ng-Passphrase!',
         ]);
 
         $response->assertStatus(201)
@@ -33,7 +33,7 @@ class AuthSecurityTest extends TestCase
         $response = $this->postJson('/api/register', [
             'name' => 'Jane',
             'email' => 'jane@example.com',
-            'password' => 'password123',
+            'password' => 'Str0ng-Passphrase!',
         ]);
 
         $response->assertJsonMissingPath('user.password');
@@ -50,10 +50,10 @@ class AuthSecurityTest extends TestCase
     public static function invalidRegistrationProvider(): array
     {
         return [
-            'missing name'     => [['email' => 'a@b.com', 'password' => 'password123']],
-            'invalid email'    => [['name' => 'A', 'email' => 'not-an-email', 'password' => 'password123']],
-            'short password'   => [['name' => 'A', 'email' => 'a@b.com', 'password' => 'short']],
-            'duplicate email'  => [['name' => 'A', 'email' => 'taken@example.com', 'password' => 'password123']],
+            'missing name' => [['email' => 'a@b.com', 'password' => 'password123']],
+            'invalid email' => [['name' => 'A', 'email' => 'not-an-email', 'password' => 'password123']],
+            'short password' => [['name' => 'A', 'email' => 'a@b.com', 'password' => 'short']],
+            'duplicate email' => [['name' => 'A', 'email' => 'taken@example.com', 'password' => 'password123']],
         ];
     }
 
@@ -62,7 +62,7 @@ class AuthSecurityTest extends TestCase
         $this->postJson('/api/register', [
             'name' => 'Hacker',
             'email' => 'hacker@example.com',
-            'password' => 'password123',
+            'password' => 'Str0ng-Passphrase!',
             'is_admin' => true,
             'is_banned' => false,
             'calorie_target' => 99999,
@@ -80,12 +80,12 @@ class AuthSecurityTest extends TestCase
     {
         User::factory()->create([
             'email' => 'bob@example.com',
-            'password' => bcrypt('password123'),
+            'password' => bcrypt('Str0ng-Passphrase!'),
         ]);
 
         $this->postJson('/api/login', [
             'email' => 'bob@example.com',
-            'password' => 'password123',
+            'password' => 'Str0ng-Passphrase!',
         ])->assertStatus(200)->assertJsonStructure(['access_token']);
     }
 
@@ -93,14 +93,14 @@ class AuthSecurityTest extends TestCase
     {
         User::factory()->create([
             'email' => 'bob@example.com',
-            'password' => bcrypt('password123'),
+            'password' => bcrypt('Str0ng-Passphrase!'),
         ]);
 
         $this->postJson('/api/login', [
             'email' => 'bob@example.com',
             'password' => 'wrong-password',
         ])->assertStatus(422)
-          ->assertJsonPath('message', 'The provided credentials are incorrect.');
+            ->assertJsonPath('message', 'The provided credentials are incorrect.');
     }
 
     public function test_login_for_unknown_user_returns_same_generic_message(): void
@@ -110,7 +110,7 @@ class AuthSecurityTest extends TestCase
             'email' => 'ghost@example.com',
             'password' => 'whatever123',
         ])->assertStatus(422)
-          ->assertJsonPath('message', 'The provided credentials are incorrect.');
+            ->assertJsonPath('message', 'The provided credentials are incorrect.');
     }
 
     // ── Token lifecycle ───────────────────────────────────────────────────────

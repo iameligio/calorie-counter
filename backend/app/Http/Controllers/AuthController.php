@@ -2,19 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * Abilities granted to a first-party SPA token. Narrow enough that a
+     * leaked token can never touch the admin panel.
+     */
+    private const TOKEN_ABILITIES = ['app:use'];
+
     public function register(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => ['required', 'string', Password::defaults()],
         ]);
 
         $user = User::create([
@@ -24,12 +33,10 @@ class AuthController extends Controller
             'calorie_target' => 2000,
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
-            'access_token' => $token,
+            'access_token' => $this->issueToken($user),
             'token_type' => 'Bearer',
-            'user' => $user
+            'user' => $user,
         ], 201);
     }
 
@@ -49,19 +56,15 @@ class AuthController extends Controller
         }
 
         if ($user->is_banned) {
-            // Using rate_limit_admin_email to signify it's cached settings.
-            $adminEmail = \Illuminate\Support\Facades\Cache::remember('admin_email', 3600, fn () => \App\Models\Setting::where('key', 'admin_email')->value('value') ?? 'support@example.com');
             throw ValidationException::withMessages([
-                'email' => ["Your account has been suspended. Please contact {$adminEmail} to appeal."],
+                'email' => ["Your account has been suspended. Please contact {$this->supportEmail()} to appeal."],
             ]);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
-            'access_token' => $token,
+            'access_token' => $this->issueToken($user),
             'token_type' => 'Bearer',
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -73,9 +76,23 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        
+
         return response()->json([
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ]);
+    }
+
+    private function issueToken(User $user): string
+    {
+        return $user->createToken('auth_token', self::TOKEN_ABILITIES)->plainTextToken;
+    }
+
+    private function supportEmail(): string
+    {
+        return Cache::remember(
+            'admin_email',
+            3600,
+            fn () => Setting::where('key', 'admin_email')->value('value') ?? 'support@example.com'
+        );
     }
 }

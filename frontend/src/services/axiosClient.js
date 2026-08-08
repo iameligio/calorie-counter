@@ -4,7 +4,10 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://myfitnesspal.tes
 
 const axiosClient = axios.create({
   baseURL: apiBaseUrl,
-  withCredentials: true,
+  // Auth is a Bearer token, not a cookie. Requesting credentials would also
+  // force the API to send Access-Control-Allow-Credentials, which it no
+  // longer does.
+  withCredentials: false,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'

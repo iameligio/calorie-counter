@@ -4,13 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -47,6 +47,10 @@ class User extends Authenticatable implements FilamentUser
     protected $hidden = [
         'password',
         'remember_token',
+        // Internal moderation flags. Filament reads these as attributes, which
+        // $hidden does not affect; this only keeps them out of API payloads.
+        'is_admin',
+        'is_banned',
     ];
 
     /**
@@ -83,11 +87,13 @@ class User extends Authenticatable implements FilamentUser
         });
     }
 
-    public function logs(): HasMany {
+    public function logs(): HasMany
+    {
         return $this->hasMany(FoodLog::class);
     }
 
-    public function dailySummaries(): HasMany {
+    public function dailySummaries(): HasMany
+    {
         return $this->hasMany(DailySummary::class);
     }
 }
