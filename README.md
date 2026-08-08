@@ -1,4 +1,4 @@
-# 🥗 Calorie Counter (MyFitnessPal Clone)
+# 🥗 Calorie Counter
 
 A personal health companion that calculates your daily calorie goals (using the
 Mifflin-St Jeor formula), tracks your food logs, and visualises progress toward
@@ -257,7 +257,7 @@ log in.
 ## 🍱 Food database
 
 Foods come from the free [USDA FoodData Central](https://fdc.nal.usda.gov) API —
-the same authoritative source MyFitnessPal uses. Get a free API key, add
+the US government's authoritative nutrition database. Get a free API key, add
 `USDA_API_KEY=...` to `backend/.env`, then run the seeder:
 
 ```bash
