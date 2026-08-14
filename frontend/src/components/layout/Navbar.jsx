@@ -25,7 +25,7 @@ export default function Navbar() {
           <div className="flex">
             <Link to="/dashboard" className="flex-shrink-0 flex items-center">
               <Activity className="h-8 w-8 text-emerald-500 mr-2" />
-              <span className="font-bold text-xl text-gray-900 tracking-tight">MyFitnessPal</span>
+              <span className="font-bold text-xl text-gray-900 tracking-tight">Calorie Tracker</span>
             </Link>
             <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
               {LINKS.map(({ to, label }) => (

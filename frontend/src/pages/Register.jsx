@@ -35,7 +35,7 @@ export default function Register() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center pb-4">
-          <CardTitle className="text-2xl text-emerald-600 font-bold">MyFitnessPal</CardTitle>
+          <CardTitle className="text-2xl text-emerald-600 font-bold">Calorie Tracker</CardTitle>
           <p className="text-sm text-gray-500 mt-2">Create an account to start tracking.</p>
         </CardHeader>
         <CardContent>

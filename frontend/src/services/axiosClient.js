@@ -1,4 +1,5 @@
 import axios from 'axios';
+import useConnectionStore from '../store/connectionStore';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://myfitnesspal.test/api';
 
@@ -26,8 +27,20 @@ axiosClient.interceptors.request.use((config) => {
 // On any 401, drop the stale token. Routing back to /login is handled by the
 // router guards in App.jsx, which react to the cleared auth state.
 axiosClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    useConnectionStore.getState().reportReachable();
+    return response;
+  },
   (error) => {
+    // A missing `response` means the request never reached the server at all —
+    // dead uplink, DNS failure, captive portal. Any HTTP status, including a
+    // 500, proves the opposite: we're online and the server answered.
+    if (error.response) {
+      useConnectionStore.getState().reportReachable();
+    } else {
+      useConnectionStore.getState().reportUnreachable();
+    }
+
     if (error.response?.status === 401) {
       localStorage.removeItem('auth_token');
     }

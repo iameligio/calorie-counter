@@ -2,9 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>Calorie Tracker</title>
+    <meta name="description" content="Log meals, track calories, and watch your progress over time." />
+
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Matches manifest.theme_color; keeps the status bar flush with the navbar. -->
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- iOS has no install prompt and ignores the manifest's display mode, so
+         standalone has to be requested here as well. `mobile-web-app-capable`
+         is the standard name; the apple-prefixed one is still what older iOS
+         actually reads. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Calories" />
   </head>
   <body>
     <div id="root"></div>
