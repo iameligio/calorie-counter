@@ -27,3 +27,9 @@ render public/icon.svg          192 public/pwa-192.png
 render public/icon.svg          512 public/pwa-512.png
 render icons/icon-fullbleed.svg 512 public/maskable-512.png
 render icons/icon-fullbleed.svg 180 public/apple-touch-icon.png
+
+# Manifest shortcut icons (long-press menu on Android). 96px is the size
+# Android asks for; the launcher masks them to a circle, same as maskable.
+for s in dashboard history settings; do
+  render "icons/shortcut-$s.svg" 96 "public/shortcut-$s.png"
+done

@@ -4,6 +4,7 @@ import useAuthStore from '../store/authStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
+import InstallCard from '../components/common/InstallCard';
 import { User, Activity, Scale, Ruler, Target, Save, CheckCircle } from 'lucide-react';
 import { profileService } from '../services/profileService';
 
@@ -112,6 +113,12 @@ export default function Settings() {
                 <p className="text-sm text-gray-500 font-medium">Personalize your calorie target calculation</p>
             </div>
         </div>
+
+        {/* Renders only when the browser can actually install, or on iOS where
+            it explains the manual route. Settings is reachable from every
+            screen via the navbar, which matters: suppressing Chrome's own
+            banner makes this the only way in. */}
+        <InstallCard />
 
         <form onSubmit={handleSubmit} className="space-y-6">
             <Card className="border-0 shadow-xl shadow-emerald-500/5">

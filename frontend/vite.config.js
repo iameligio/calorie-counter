@@ -42,14 +42,42 @@ export default defineConfig({
           { src: '/pwa-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
           { src: '/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
+
+        // Long-press actions on the installed launcher icon (Android; ignored
+        // by iOS). These land on guarded routes — the router bounces to /login
+        // when there's no session, which is the correct behaviour.
+        shortcuts: [
+          {
+            name: "Today's log",
+            short_name: 'Today',
+            description: "Jump straight to today's food log",
+            url: '/dashboard',
+            icons: [{ src: '/shortcut-dashboard.png', sizes: '96x96', type: 'image/png' }],
+          },
+          {
+            name: 'History',
+            short_name: 'History',
+            description: 'Review previous days and their totals',
+            url: '/history',
+            icons: [{ src: '/shortcut-history.png', sizes: '96x96', type: 'image/png' }],
+          },
+          {
+            name: 'Settings',
+            short_name: 'Settings',
+            description: 'Adjust your profile and calorie target',
+            url: '/settings',
+            icons: [{ src: '/shortcut-settings.png', sizes: '96x96', type: 'image/png' }],
+          },
+        ],
       },
 
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
 
         // vite-plugin-pwa injects the manifest's own icons into the precache
-        // manifest already. Without this they are listed twice.
-        globIgnores: ['pwa-*.png', 'maskable-*.png'],
+        // manifest already — shortcut icons included. Without this they are
+        // listed twice.
+        globIgnores: ['pwa-*.png', 'maskable-*.png', 'shortcut-*.png'],
 
         // Recharts pushes the main chunk past Workbox's 2 MiB default.
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
