@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/common/C
 import { Input } from '../components/common/Input';
 import { Button } from '../components/common/Button';
 import useAuthStore from '../store/authStore';
+import { apiErrorMessage } from '../lib/apiError';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Register() {
@@ -20,19 +21,12 @@ export default function Register() {
       await register(name, email, password);
       navigate('/dashboard');
     } catch (err) {
-      // A 422 carries per-field detail; the password policy usually trips more
-      // than one rule at a time, so show all of them rather than just the first.
-      const fieldErrors = Object.values(err.response?.data?.errors ?? {}).flat();
-      setError(
-        fieldErrors.length
-          ? fieldErrors.join(' ')
-          : err.response?.data?.message || 'Registration failed. Please try again.'
-      );
+      setError(apiErrorMessage(err, 'Registration failed. Please try again.'));
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 bg-cubes p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center pb-4">
           <CardTitle className="text-2xl text-emerald-600 font-bold">Calorie Tracker</CardTitle>

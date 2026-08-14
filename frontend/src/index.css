@@ -18,6 +18,15 @@
   @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
 }
 
+/* Page background texture, from transparenttextures.com (free for commercial
+   use). Vendored into public/ rather than hot-linked: the CDN copy was a
+   third-party request on every page load, and it left the background blank
+   whenever the app ran offline — which defeats the point of precaching the
+   shell. Served locally it gets precached with everything else. */
+.bg-cubes {
+  background-image: url('/cubes.png');
+}
+
 @keyframes bounce-subtle {
   0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
   50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }

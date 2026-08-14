@@ -99,7 +99,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pb-20">
+    <div className="min-h-screen bg-gray-50 bg-cubes pb-20">
       <Navbar />
       
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">

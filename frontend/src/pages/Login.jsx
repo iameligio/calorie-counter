@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/common/C
 import { Input } from '../components/common/Input';
 import { Button } from '../components/common/Button';
 import useAuthStore from '../store/authStore';
+import { apiErrorMessage } from '../lib/apiError';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
@@ -19,12 +20,12 @@ export default function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(apiErrorMessage(err, 'Login failed. Please try again.'));
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 bg-cubes p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center pb-4">
           <CardTitle className="text-2xl text-emerald-600 font-bold">Calorie Tracker</CardTitle>
